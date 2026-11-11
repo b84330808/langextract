@@ -154,6 +154,7 @@ _END_OF_SENTENCE_PATTERN = regex.compile(r"[.?!。！？\u0964][\"'”’»)\]}]
 _TOKEN_PATTERN = regex.compile(
     rf"{_LETTERS_PATTERN}|{_DIGITS_PATTERN}|{_SYMBOLS_PATTERN}"
 )
+_DIGITS_RE = regex.compile(_DIGITS_PATTERN)
 _WORD_PATTERN = regex.compile(rf"(?:{_LETTERS_PATTERN}|{_DIGITS_PATTERN})\Z")
 
 # Abbreviations that do not end sentences.
@@ -216,7 +217,7 @@ class RegexTokenizer(Tokenizer):
           has_newline = text.find("\r", previous_end, start_pos) != -1
         if has_newline:
           token.first_token_after_newline = True
-      if regex.fullmatch(_DIGITS_PATTERN, matched_text):
+      if _DIGITS_RE.fullmatch(matched_text):
         token.token_type = TokenType.NUMBER
       elif _WORD_PATTERN.fullmatch(matched_text):
         token.token_type = TokenType.WORD
